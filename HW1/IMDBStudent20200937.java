@@ -57,7 +57,7 @@ public class IMDBStudent20200937 {
 
         Job job = new Job(conf, "Movie");
 
-        job.setJarByClass(IMDBStudent20181009.class);
+        job.setJarByClass(IMDBStudent20200937.class);
         job.setMapperClass(MovieMapper.class);
         job.setReducerClass(MovieReducer.class);
 
