@@ -17,70 +17,48 @@ import org.apache.hadoop.util.GenericOptionsParser;
 public class UBERStudent20200937
 {
 
-        public static class UberMapper extends Mapper<LongWritable, Text, Text, Text>
-        {
-                private Text region_day = new Text();
-                private Text trips_vehicles = new Text();
+        public static class UBERMapper extends Mapper<Object, Text, Text, Text>{
+		public void map(Object key, Text value, Context context) throws IOException, InterruptedException 
+		{
+		    String[] uber = value.toString().split(",");
+		    String region = uber[0];
+		    String date = uber[1];
+		    String vehicles = uber[2];
+		    String trips = uber[3];
+		
+		    String[] days = {"SUN", "MON", "TUE", "WED", "THR", "FRI", "SAT"};
+           	    Date day = new Date(date);
+		    String dayOfWeek= days[day.getDay()];
+		    Text regionDate = new Text(region + "," + dayOfWeek);
+		    Text tripVehicle = new Text(trips + "," + vehicles);
+		    context.write(regionDate, tripVehicle);
+		}
+	}
 
-                public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException
-                {
-                    //Write map code
-                    String line = value.toString();
-                    String[] uberInfo = line.split(",");
-                    String region = uberInfo[0];
-                    String date = uberInfo[1];
-                    String vehicles = uberInfo[2];
-                    String trips = uberInfo[3];
+	public static class UBERReducer extends Reducer<Text,Text,Text,Text> 
+	{
+		private Text word = new Text();
 
-                    // 1/15/2015 
-                    String[] dateInfo = date.split("/");
-                    String month = dateInfo[0];
-                    String day = dateInfo[1];
-                    String year = dateInfo[2];
-                    LocalDate date2 = LocalDate.of( Integer.parseInt(year),  Integer.parseInt(month),  Integer.parseInt(day));
-                    DayOfWeek dayOfWeek = date2.getDayOfWeek();
-                    String dayofweek = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.US).toUpperCase();
-                    if(dayofweek.equals("THU")) {
-                            dayofweek = "THR";
-                    }
-                    String region_day1 = region+","+dayofweek;
-                    String trips_vehicles1 = trips+","+vehicles;
+		public void reduce(Text key, Iterable<Text> value, Context context) throws IOException, InterruptedException 
+		{
+		    int tripAll = 0;
+		    int vehicleAll = 0;
 
-                    region_day.set(region_day1);
-                    trips_vehicles.set(trips_vehicles1);
-                    context.write(region_day, trips_vehicles);
-                }
-        }
+		    for (Text val : value) {
+			String line = val.toString();
+			String[] tripVehicle = line.split(",");
 
-        public static class UberReducer extends Reducer<Text,Text,Text,Text>
-        {
-                private int tripSum = 0;
-                private int vehicleSum = 0;
-                private Text trips_vehicles = new Text();
+			int trip = Integer.parseInt(tripVehicle[0]);
+			int vehicle = Integer.parseInt(tripVehicle[1]);
 
-                public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException
-                {
-                    int tripSum = 0;
-                    int vehicleSum = 0;
-                    //Write reduce code
-                    for (Text val : values) {
-                        String line = val.toString();
-                        String[] trip_vehicle = line.split(",");
-                        
-                        String trip_string = trip_vehicle[0];
-                        String vehicle_string = trip_vehicle[1];
+			tripAll += trip;
+			vehicleAll += vehicle;
+		    }
 
-                        int trip_int = Integer.parseInt(trip_string);
-                        int vehicle_int = Integer.parseInt(vehicle_string);
-
-                        tripSum += trip_int;
-                        vehicleSum += vehicle_int;
-                    }
-                    String t_v = Integer.toString(tripSum)+","+Integer.toString(vehicleSum);
-                    trips_vehicles.set(t_v);
-                    context.write(key, trips_vehicles);
-                }
-        }
+		    word.set(Integer.toString(tripAll)+","+Integer.toString(vehicleAll));
+		    context.write(key, word);
+       		}
+	}
 
         public static void main(String[] args) throws Exception
         {
@@ -91,16 +69,15 @@ public class UBERStudent20200937
                         System.err.println("Usage: Uber <in> <out>");
                         System.exit(2);
                 }
-                Job job = new Job(conf, "Uber");
-                job.setJarByClass(UBERStudent20200937.class);
-                job.setMapperClass(UberMapper.class);
-                job.setCombinerClass(UberReducer.class);
-                job.setReducerClass(UberReducer.class);
-                job.setOutputKeyClass(Text.class);
-                job.setOutputValueClass(Text.class);
-                FileInputFormat.addInputPath(job, new Path(otherArgs[0]));
-                FileOutputFormat.setOutputPath(job, new Path(otherArgs[1]));
-                FileSystem.get(job.getConfiguration()).delete( new Path(otherArgs[1]), true);
-                System.exit(job.waitForCompletion(true) ? 0 : 1);
+                Job job = new Job(conf, "UBERStudent20200937");
+		job.setJarByClass(UBERStudent20200937.class);
+		job.setMapperClass(UBERMapper.class);
+		job.setReducerClass(UBERReducer.class);
+		job.setOutputKeyClass(Text.class);
+		job.setOutputValueClass(Text.class);
+		FileInputFormat.addInputPath(job, new Path(otherArgs[0]));
+		FileOutputFormat.setOutputPath(job, new Path(otherArgs[1]));
+		FileSystem.get(job.getConfiguration()).delete( new Path(otherArgs[1]), true);
+		System.exit(job.waitForCompletion(true) ? 0 : 1);
         }
 }
