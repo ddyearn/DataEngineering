@@ -70,7 +70,7 @@ public class IMDBStudent20200937 {
 	
 	public static class AverageComparator implements Comparator<Info> {
 		public int compare(Info x, Info y) {
-//			Æò±ÕÀÌ Å« °ÍÀÌ ¿ì¼±¼øÀ§°¡ ³ôÀº °Í
+//			í‰ê· ì´ í° ê²ƒì´ ìš°ì„ ìˆœìœ„ê°€ ë†’ì€ ê²ƒ
 			if ( x.average > y.average ) return 1;
 			if ( x.average < y.average ) return -1;
 			return 0;
@@ -78,7 +78,7 @@ public class IMDBStudent20200937 {
 	}
 	
 	public static void insertInfo(PriorityQueue q, String movie_title, double average, int topK) {
-//		¿ì¼±¼øÀ§°¡ Á¦ÀÏ ³·Àº (Æò±ÕÀÌ Á¦ÀÏ ³·Àº) °Í »Ì¾Æ³»±â
+//		ìš°ì„ ìˆœìœ„ê°€ ì œì¼ ë‚®ì€ (í‰ê· ì´ ì œì¼ ë‚®ì€) ê²ƒ ë½‘ì•„ë‚´ê¸°
 		Info info_head = (Info) q.peek();
 		if ( q.size() < topK || info_head.average < average ) {
 			Info info = new Info(movie_title, average);
@@ -183,8 +183,7 @@ public class IMDBStudent20200937 {
 				String data = val.toString();
 				String [] splited = data.split(",");
 				
-				if(i == 0) {
-					if(!splited[0].equals("M")) break;
+				if(!splited[0].equals("M")) {
 					movie_title = splited[1];
 				} else {
 					total_rate += Integer.valueOf(splited[1]);
