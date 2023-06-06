@@ -1,9 +1,7 @@
 import scala.Tuple2;
-
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.api.java.*;
 import org.apache.spark.api.java.function.*;
-
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Iterator;
