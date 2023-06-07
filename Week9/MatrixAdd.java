@@ -36,23 +36,28 @@ public class MatrixAdd {
 	}
 	
 	public static void main(String[] args) throws Exception {
-    	Configuration conf = new Configuration();
-    	String [] otherArgs = new GenericOptionParser(conf, args).getRemainingArgs();
-    	if(otherArgs.length != 2) {
-    		System.exit(2);
-    	}
-    	Job job = new Job(conf, "MatrixAdd");
-    	job.setJarByClass(MatrixAdd.class);
-    	job.setMapperClass(MatrixAddMapper.class);
-    	job.setReducerClass(MatrixAddReducer.class);
-    	job.setCombinerClass(MatrixAddReducer.class);
-    	job.setOutputKeyClass(Text.class);
-    	job.setOutputValueClass(IntWritable.class);
-    	job.setInputFormatClass(TextInputFormat.class);
-    	job.setOutputFormatClass(TextOutputFormat.class);
-    	FileInputFormat.addInputFormat(job, new Path(otherArgs[0]));
-    	FileOutputFormat.addOutputFormat(job, new Path(otherArgs[1]));
-    	FileSystem.get(job.getConfiguration()).delete(new Path(otherArgs[1]), true);
-    	job.waitForCompletion(true);
-    }
+		Configuration conf = new Configuration();
+		String [] otherArgs = new GenericOptionParser(conf, args).getRemainingArgs();
+		if(otherArgs.length != 2) {
+			System.exit(2);
+		}
+		Job job = new Job(conf, "MatrixAdd");
+		job.setJarByClass(MatrixAdd.class);
+		
+		job.setMapperClass(MatrixAddMapper.class);
+		job.setReducerClass(MatrixAddReducer.class);
+		job.setCombinerClass(MatrixAddReducer.class);
+		
+		job.setOutputKeyClass(Text.class);
+		job.setOutputValueClass(IntWritable.class);
+		
+		job.setInputFormatClass(TextInputFormat.class);
+		job.setOutputFormatClass(TextOutputFormat.class);
+		
+		FileInputFormat.addInputFormat(job, new Path(otherArgs[0]));
+		FileOutputFormat.addOutputFormat(job, new Path(otherArgs[1]));
+		
+		FileSystem.get(job.getConfiguration()).delete(new Path(otherArgs[1]), true);
+		job.waitForCompletion(true);
+	}
 }
