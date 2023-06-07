@@ -10,6 +10,7 @@ import org.apache.hadoop.mapreduce.lib.output.*;
 import org.apache.hadoop.util.GenericOptionsParser;
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FSDataOutputStream;
+
 class Emp {
 	public int id;
 	public int salary;
@@ -28,6 +29,7 @@ class Emp {
 }	
 
 public class TopK {
+	
 	public static class EmpComparator implements Comparator<Emp> {
 		public int compare(Emp x, Emp y) {
 			if ( x.salary > y.salary ) return 1;
