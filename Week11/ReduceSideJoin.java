@@ -15,8 +15,7 @@ public class ReduceSideJoin {
   
 	public static class ReduceSideJoinMapper extends Mapper<Object, Text, Text, Text> {
 		boolean fileA = true;
-		public void map(Object key, Text value, Context context)
-				throws IOException, InterruptedException {
+		public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
 			StringTokenizer itr = new StringTokenizer(value.toString(), "|");
 			Text outputKey = new Text();
 			Text outputValue = new Text();
