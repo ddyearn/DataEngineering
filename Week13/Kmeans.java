@@ -22,8 +22,7 @@ public class Kmeans {
 		private double[] center_x;
 		private double[] center_y;
 		
-		protected void setup(Context context) 
-				throws IOException, InterruptedException {
+		protected void setup(Context context) throws IOException, InterruptedException {
 			Configuration conf = context.getConfiguration();
 			n_centers = conf.getInt("n_centers", -1);
 			center_x = new double[n_centers];
@@ -39,8 +38,7 @@ public class Kmeans {
 			return Math.sqrt( dist );
 		}
 		
-		public void map(LongWritable key, Text value, Context context) 
-				throws IOException, InterruptedException {
+		public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 			StringTokenizer itr = new StringTokenizer(value.toString(), ",");
 			if( itr.countTokens() < 2 ) return;
 			if( n_centers == 0 ) return;
@@ -61,11 +59,8 @@ public class Kmeans {
 		}
 	}
 	
-	
-	
 	public static class KMeansReducer extends Reducer<IntWritable,Text,IntWritable,Text> {
-		public void reduce(IntWritable key, Iterable<Text> values, Context context )
-				throws IOException, InterruptedException {
+		public void reduce(IntWritable key, Iterable<Text> values, Context context ) throws IOException, InterruptedException {
 			double x_total = 0;
 			double y_total = 0;
 			int cnt = 0 ;
@@ -97,7 +92,7 @@ public class Kmeans {
 	
 	public static void updateCenter (Configuration conf) throws Exception {
 		FileSystem dfs = FileSystem.get(conf);
-		Path filenamePath = new Path( "/user/hyeonji/kmeansoutput/part-r-00000" );
+		Path filenamePath = new Path( "/user/bigdata/output/part-r-00000" );
 		FSDataInputStream in = dfs.open(filenamePath);
 		BufferedReader reader = new BufferedReader( new InputStreamReader(in) );
 		String line = reader.readLine();
