@@ -12,14 +12,14 @@ import scala.Tuple2;
 public class SparkMatrix {
 	public static void main(String [] args) throws Exception {
 		if(args.length < 1) {
-            System.out.println("Usage : SparkMatrix <file>");
-            System.exit(1);
+			System.out.println("Usage : SparkMatrix <file>");
+			System.exit(1);
 		}
 
 		SparkSession spark = SparkSession
-            .builder()
-            .appName("SparkMatrix")
-            .getOrCreate();
+			.builder()
+			.appName("SparkMatrix")
+			.getOrCreate();
 		
 		JavaRDD<String> mat1 = spark.read().textFile(args[0]).javaRDD();
 		JavaRDD<String> mat2 = spark.read().textFile(args[1]).javaRDD();
