@@ -31,7 +31,6 @@ public class MapSideJoin {
 				line = br.readLine();
 			}
 		}
-		
 	}
 	
 	public static void main(String[] args) throws Exception {
