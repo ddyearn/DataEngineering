@@ -1,14 +1,3 @@
-import org.apache.spark.sql.SparkSession;
-import org.apache.spark.api.java.*;
-import org.apache.spark.api.java.function.*;
-
-import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.regex.Pattern;
-import scala.Tuple2;
-
 class Product implements Serializable {
 	Integer product_id;
 	Integer product_price;
