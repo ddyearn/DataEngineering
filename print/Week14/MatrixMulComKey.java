@@ -179,7 +179,5 @@ public class MatrixMulComKey {
         FileOutputFormat.setOutputPath(job1, new Path(otherArgs[1]));
         FileSystem.get(job1.getConfiguration()).delete( new Path(otherArgs[1]), true);
         job1.waitForCompletion(true);
-
-		
 	}
 }
