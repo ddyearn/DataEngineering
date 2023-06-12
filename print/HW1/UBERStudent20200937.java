@@ -1,5 +1,4 @@
 public class UBERStudent20200937{
-
         public static class UBERMapper extends Mapper<Object, Text, Text, Text>{
 		public void map(Object key, Text value, Context context) throws IOException, InterruptedException  {
 		    String[] uber = value.toString().split(",");
