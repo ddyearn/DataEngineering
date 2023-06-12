@@ -1,16 +1,3 @@
-import java.io.IOException;
-import java.util.*;
-
-import org.apache.hadoop.conf.*;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.*;
-import org.apache.hadoop.mapreduce.*;
-import org.apache.hadoop.mapreduce.lib.input.*;
-import org.apache.hadoop.mapreduce.lib.output.*;
-import org.apache.hadoop.util.GenericOptionsParser;
-
-
 public class IMDBStudent20200937 {
 
 	public static class Movie {
@@ -43,8 +30,7 @@ public class IMDBStudent20200937 {
 	public static class IMDBMapper extends Mapper<Object, Text, Text, Text> {
 		boolean fileM = true;
 		
-		public void map(Object key, Text value, Context context) throws IOException, InterruptedException
-		{
+		public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
 			Text outputKey = new Text();
 			Text outputValue = new Text();
 			String joinKey = "";	// movie id
@@ -76,8 +62,7 @@ public class IMDBStudent20200937 {
 				context.write(outputKey, outputValue);
 			}
 		}
-		protected void setup(Context context) throws IOException, InterruptedException
-		{
+		protected void setup(Context context) throws IOException, InterruptedException {
 			String filename = ((FileSplit)context.getInputSplit()).getPath().getName();
 			
 			if (filename.indexOf("movies.dat") != -1) fileM = true;
@@ -93,8 +78,7 @@ public class IMDBStudent20200937 {
 		private Comparator<Movie> comp = new MovieComparator();
 		private int topK;
 
-		public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException, NumberFormatException
-		{
+		public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException, NumberFormatException {
 			int sum = 0;
 			double avg = 0.0;
 			int count = 0;
@@ -133,26 +117,4 @@ public class IMDBStudent20200937 {
 			}
 		}
 	}
-	
-	public static void main(String[] args) throws Exception {
-		Configuration conf = new Configuration();
-		String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
-		if (otherArgs.length != 3) 
-		{
-			System.err.println("Usage: IMDB <in> <out>");
-			System.exit(2);
-		}
-		conf.setInt("topK", Integer.parseInt(otherArgs[2]));
-		Job job = new Job(conf, "IMDB");
-		job.setJarByClass(IMDBStudent20200937.class);
-		job.setMapperClass(IMDBMapper.class);
-		job.setReducerClass(IMDBReducer.class);
-		job.setOutputKeyClass(Text.class);
-		job.setOutputValueClass(Text.class);
-		FileInputFormat.addInputPath(job, new Path(otherArgs[0]));
-		FileOutputFormat.setOutputPath(job, new Path(otherArgs[1]));
-		FileSystem.get(job.getConfiguration()).delete(new Path(otherArgs[1]), true);
-		System.exit(job.waitForCompletion(true) ? 0 : 1);
-	}
-	
 }
