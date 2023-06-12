@@ -1,6 +1,4 @@
-import week10.Context;
-import week10.Emp;
-import week10.Text;
+import week10.Context, week10.Emp, week10.Text;
 public class KmeansCombiner {
 	public static class KMeansMapper extends Mapper<LongWritable, Text, IntWritable, Text>{
 		private IntWritable one_key = new IntWritable();
