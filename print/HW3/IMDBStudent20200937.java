@@ -1,17 +1,4 @@
-import scala.Tuple2;
-import org.apache.spark.sql.SparkSession;
-import org.apache.spark.api.java.*;
-import org.apache.spark.api.java.function.*;
-import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.regex.Pattern;
-import java.util.ArrayList;
-import java.util.StringTokenizer;
-
 public final class IMDBStudent20200937 {
-
     public static void main(String[] args) throws Exception {
 
         if (args.length < 2) {
