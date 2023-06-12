@@ -23,7 +23,6 @@ public class MatrixAdd {
 			context.write(key, result);
 		}
 	}
-	
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
 		String [] otherArgs = new GenericOptionParser(conf, args).getRemainingArgs();
