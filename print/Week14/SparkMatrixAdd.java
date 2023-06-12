@@ -1,13 +1,3 @@
-import java.util.ArrayList;
-import java.util.Iterator;
-import org.apache.spark.sql.SparkSession;
-import org.apache.spark.api.java.*;
-import org.apache.spark.api.java.function.*;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.regex.Pattern;
-import scala.Tuple2;
 public class SparkMatrixAdd {
         public static void main(String [] args) {
                 SparkSession spark = SparkSession.builder().appName("matrixadd").getOrCreate();
