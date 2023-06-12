@@ -1,7 +1,4 @@
-// joinKey = 상품코드
-// tableName = A or B
-
-// Composite Key
+// Composite Key	// joinKey = 상품코드	// tableName = A or B
 class DoubleString implements WritableComparable {
 	String joinKey = new String();
 	String tableName = new String();
