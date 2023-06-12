@@ -23,24 +23,20 @@ public class MatrixMul {
 		public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
 			StringTokenizer itr = new StringTokenizer(value.toString());
 			if(itr.countTokens() < 3) return;
-			
-			// if A_matrix row_id(i) col_id(x)
-			// if B_matrix row_id(x) col_id(j)
+			// if A_matrix row_id(i) col_id(x)	// if B_matrix row_id(x) col_id(j)
 			int row_id = Integer.parseInt( itr.nextToken().trim() ); 
 			int col_id = Integer.parseInt( itr.nextToken().trim() ); 
 			int matrix_value = Integer.parseInt( itr.nextToken().trim() );
 			i_value.set( matrix_value );
 			
 			if ( isA ) {
-				for( int i = 0 ; i < n_value ; i++ ) {
-					// i, j, x sequence
+				for( int i = 0 ; i < n_value ; i++ ) {		// i, j, x sequence
 					word.set(new byte[0]);
 					word.set(row_id + "," + i + "," + col_id);
 					context.write(word, i_value);
 				}
 			} else if ( isB ) {
-				for( int i = 0; i < m_value ; i++ ) {
-					// i, j, x sequence
+				for( int i = 0; i < m_value ; i++ ) {		// i, j, x sequence
 					word.set(new byte[0]);
 					word.set(i + "," + col_id + "," + row_id);
 					context.write(word, i_value);
