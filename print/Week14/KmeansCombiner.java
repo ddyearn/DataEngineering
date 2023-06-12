@@ -41,7 +41,6 @@ public class KmeansCombiner {
 				}
 			}
 			one_key.set( cluster_idx );
-			
 			context.write( one_key, value );
 		}
 	}
