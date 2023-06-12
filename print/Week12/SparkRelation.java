@@ -40,8 +40,8 @@ public class SparkRelation {
              .getOrCreate();
     	// read file
     	JavaRDD<String> products = spark.read().textFile(args[0]).javaRDD();
+		
      	// split text file with " 
-
     	JavaPairRDD<String, Product> pTuples = products.mapToPair(new PairFunction<String, String, Product>() {
     		public Tuple2<String, Product> call(String s) {
     			String [] splited = s.split("|");
