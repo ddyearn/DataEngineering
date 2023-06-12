@@ -14,9 +14,7 @@ class Emp {
 		return id + "|" + dept_id + "|" + salary + "|" + emp_info;
 	}
 }	
-
 public class TopK {
-	
 	public static class EmpComparator implements Comparator<Emp> {
 		public int compare(Emp x, Emp y) {
 			if ( x.salary > y.salary ) return 1;
@@ -24,7 +22,6 @@ public class TopK {
 			return 0;
 		}
 	}
-	
 	public static void insertEmp(PriorityQueue q, int id, int salary, String dept_id, String emp_info, int topK) {
 			Emp emp_head = (Emp) q.peek();
 			if ( q.size() < topK || emp_head.salary < salary ) {
@@ -33,7 +30,6 @@ public class TopK {
 				if( q.size() > topK ) q.remove();
 			}
 	}
-	
 	public static class TopKMapper extends Mapper<Object, Text, Text, NullWritable> {
 		private Comparator<Emp> comp = new EmpComparator();
 		private PriorityQueue<Emp> queue;
@@ -48,13 +44,11 @@ public class TopK {
 		
 			insertEmp(queue, emp_id, salary, dept_id, emp_info, topK);
 		}
-	
 		protected void setup(Context context) throws IOException, InterruptedException {
 			Configuration conf = context.getConfiguration();
 			topK = conf.getInt("topK", -1);
 			queue = new PriorityQueue<Emp>( topK , comp);
 		}
-		
 		protected void cleanup(Context context) throws IOException, InterruptedException {
 			while( queue.size() != 0 ) {
 				Emp emp = (Emp) queue.remove();
@@ -62,7 +56,6 @@ public class TopK {
 			}
 		}
 	}
-	
 	public static class TopKReducer extends Reducer<Text,NullWritable,Text,NullWritable> {
 		private PriorityQueue<Emp> queue;
 		private Comparator<Emp> comp = new EmpComparator();
@@ -75,13 +68,11 @@ public class TopK {
 			String emp_info = itr.nextToken().trim();
 			insertEmp(queue, emp_id, salary, dept_id, emp_info, topK);
 		}
-		
 		protected void setup(Context context) throws IOException, InterruptedException {
 			Configuration conf = context.getConfiguration();
 			topK = conf.getInt("topK", -1);
 			queue = new PriorityQueue<Emp>( topK , comp);
 		}
-		
 		protected void cleanup(Context context) throws IOException, InterruptedException {
 			while( queue.size() != 0 ) {
 				Emp emp = (Emp) queue.remove();
@@ -89,7 +80,6 @@ public class TopK {
 			}
 		}
 	}
-	
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
 		String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
