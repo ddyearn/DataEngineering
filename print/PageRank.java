@@ -1,18 +1,4 @@
-import java.io.*;
-import java.util.*;
-import org.apache.hadoop.conf.*;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.fs.FSDataInputStream;
-import org.apache.hadoop.fs.FSDataOutputStream;
-import org.apache.hadoop.io.*;
-import org.apache.hadoop.mapreduce.*;
-import org.apache.hadoop.mapreduce.lib.input.*;
-import org.apache.hadoop.mapreduce.lib.output.*;
-import org.apache.hadoop.util.GenericOptionsParser;
-
-public class PageRank
-{
+public class PageRank {
 	public static class PageRankMapper extends Mapper<LongWritable, Text, IntWritable, DoubleWritable>{
 		private IntWritable one_key = new IntWritable();
 		private DoubleWritable one_value = new DoubleWritable();
@@ -32,28 +18,22 @@ public class PageRank
 				one_key.set(link);
 				context.write(one_key, one_value);
 			}
-			
-			
 		}
-		protected void setup(Context context) throws IOException, InterruptedException
-		{
+		protected void setup(Context context) throws IOException, InterruptedException {
 			Configuration conf = context.getConfiguration();
 			n_pages = conf.getInt("n_pages", -1);
 			pagerank =new double[n_pages];
-			for(int i=0; i<n_pages; i++) 
-			{                                
+			for(int i=0; i<n_pages; i++)  {                                
 				pagerank[i] = conf.getFloat( "pagerank" + i, 0 );
 			}
 		}
 	}
 	
-	public static class PageRankReducer extends Reducer<IntWritable, DoubleWritable, IntWritable, DoubleWritable>
-	{
-	private DoubleWritable result = new DoubleWritable();
-	private double damping_factor = 0.85;
-	private int n_pages;
-	public void reduce(IntWritable key, Iterable<DoubleWritable> values, Context context ) throws IOException, InterruptedException
-		{
+	public static class PageRankReducer extends Reducer<IntWritable, DoubleWritable, IntWritable, DoubleWritable> {
+		private DoubleWritable result = new DoubleWritable();
+		private double damping_factor = 0.85;
+		private int n_pages;
+		public void reduce(IntWritable key, Iterable<DoubleWritable> values, Context context ) throws IOException, InterruptedException {
 			double agg_val = 0;
 			
 			// 새로운page rank 값구하기.
@@ -67,33 +47,27 @@ public class PageRank
 			link_value *= damping_factor;
 			agg_val = random_value + link_value;
 			
-			
 			result.set( agg_val );
 			context.write(key, result);
 		}
-	protected void setup(Context context) throws IOException, InterruptedException
-		{
+		protected void setup(Context context) throws IOException, InterruptedException {
 			Configuration conf = context.getConfiguration();
 			n_pages = conf.getInt("n_pages", -1);
 		}
 	}
 	
-	
-	public static void main(String[] args) throws Exception 
-	{
+	public static void main(String[] args) throws Exception  {
 		int n_pages = 4;
 		int n_iter = 3;
 		Configuration conf = new Configuration();
 		String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
-		if (otherArgs.length != 2)
-		{
+		if (otherArgs.length != 2) {
 			System.err.println("Usage: PageRank <in> <out>");
 			System.exit(2);
 		}
 		initPageRank(conf, n_pages);
 
-		for( int i = 0; i < n_iter; i++ )
-		{
+		for( int i = 0; i < n_iter; i++ ) {
 			Job job = new Job(conf, "page rank");
 			job.setJarByClass(PageRank.class);
 			job.setMapperClass(PageRankMapper.class);
@@ -109,21 +83,18 @@ public class PageRank
 		}
 	}
 
-	public static void initPageRank(Configuration conf, int n_pages)
-	{
+	public static void initPageRank(Configuration conf, int n_pages) {
 		conf.setInt("n_pages", n_pages);
 		for(int i=0; i < n_pages; i++)
 		conf.setFloat( "pagerank"+i, (float)(1.0/(double)n_pages));
 	}
-	public static void updatePageRank( Configuration conf, int n_pages) throws Exception
-	{
+	public static void updatePageRank( Configuration conf, int n_pages) throws Exception {
 		FileSystem dfs = FileSystem.get(conf);
 		Path filenamePath = new Path( "/user/bigdata/output/part-r-00000" );
 		FSDataInputStream in = dfs.open(filenamePath);
 		BufferedReader reader = new BufferedReader( new InputStreamReader(in) );
 		String line = reader.readLine();
-		while( line != null )
-		{
+		while( line != null ) {
 			StringTokenizer itr = new StringTokenizer(new String( line ) ) ;
 			int src_id = Integer.parseInt(itr.nextToken().trim());
 			double pr = Double.parseDouble(itr.nextToken().trim());
