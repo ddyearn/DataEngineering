@@ -95,6 +95,13 @@ public class MatrixMul {
 	}
 	
 	
+	
+	
+	
+	
+	
+	
+	
 	public static void main(String[] args) throws Exception {
 		// m은 matrix_a의 행의 갯수
 		// n은 matrix_b의 열의 갯수
