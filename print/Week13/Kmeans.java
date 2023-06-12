@@ -94,6 +94,15 @@ public class Kmeans {
 		}
 	}
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	public static void main(String[] args) throws Exception {
 		int n_iter = 3;
 		int n_centers = 2;
