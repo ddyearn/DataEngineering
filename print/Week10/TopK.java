@@ -41,7 +41,6 @@ public class TopK {
 			String dept_id = itr.nextToken().trim();
 			int salary = Integer.parseInt( itr.nextToken().trim() );
 			String emp_info = itr.nextToken().trim();
-		
 			insertEmp(queue, emp_id, salary, dept_id, emp_info, topK);
 		}
 		protected void setup(Context context) throws IOException, InterruptedException {
