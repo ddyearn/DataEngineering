@@ -12,7 +12,6 @@ public class MatrixAdd {
 			context.write(word, i_value );
 		}
 	}
-
 	public static class MatrixAddReducer extends Reducer <Text, IntWritable, Text, IntWritable> {
 		private IntWritable result = new IntWritable();
 		public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
@@ -33,16 +32,13 @@ public class MatrixAdd {
 		}
 		Job job = new Job(conf, "MatrixAdd");
 		job.setJarByClass(MatrixAdd.class);
-		
 		job.setMapperClass(MatrixAddMapper.class);
 		job.setReducerClass(MatrixAddReducer.class);
 		job.setCombinerClass(MatrixAddReducer.class);
-		
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(IntWritable.class);
 		job.setInputFormatClass(TextInputFormat.class);
 		job.setOutputFormatClass(TextOutputFormat.class);
-		
 		FileInputFormat.addInputFormat(job, new Path(otherArgs[0]));
 		FileOutputFormat.addOutputFormat(job, new Path(otherArgs[1]));
 		FileSystem.get(job.getConfiguration()).delete(new Path(otherArgs[1]), true);
