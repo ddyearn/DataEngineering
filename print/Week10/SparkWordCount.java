@@ -1,5 +1,4 @@
 public final class SparkWordCount implements Serializable {
-
 	public static void main(String[] args) throws Exception {
 
 		if(args.length < 2) {
@@ -38,5 +37,4 @@ public final class SparkWordCount implements Serializable {
 		counts.saveAsTextFile(args[1]);
 		spark.stop();
 	}
-
 }
