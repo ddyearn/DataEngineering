@@ -40,13 +40,11 @@ public class MatrixAdd {
 		
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(IntWritable.class);
-		
 		job.setInputFormatClass(TextInputFormat.class);
 		job.setOutputFormatClass(TextOutputFormat.class);
 		
 		FileInputFormat.addInputFormat(job, new Path(otherArgs[0]));
 		FileOutputFormat.addOutputFormat(job, new Path(otherArgs[1]));
-		
 		FileSystem.get(job.getConfiguration()).delete(new Path(otherArgs[1]), true);
 		job.waitForCompletion(true);
 	}
