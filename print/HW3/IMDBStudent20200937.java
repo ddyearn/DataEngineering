@@ -1,11 +1,9 @@
 public final class IMDBStudent20200937 {
     public static void main(String[] args) throws Exception {
-
         if (args.length < 2) {
             System.err.println("Usage: IMDB <in-file> <out-file>");
             System.exit(1);
         }
-
         SparkSession spark = SparkSession
             .builder()
             .appName("IMDB")
