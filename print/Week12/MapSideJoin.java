@@ -1,17 +1,3 @@
-import java.net.URI;
-import java.util.*;
-import java.io.*;
-import org.apache.hadoop.conf.*;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.*;
-import org.apache.hadoop.mapreduce.*;
-import org.apache.hadoop.mapred.lib.*;
-import org.apache.hadoop.mapreduce.lib.input.*;
-import org.apache.hadoop.mapreduce.lib.output.*;
-import org.apache.hadoop.util.GenericOptionsParser;
-import org.apache.hadoop.filecache.*;
-
 public class MapSideJoin {
 	public static class MapSideJoinMapper extends Mapper<Object, Text, Text, Text>{
 		Hashtable<String,String> joinMap = new Hashtable<String,String>();
